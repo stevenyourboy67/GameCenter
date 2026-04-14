@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download Files — Kahootinator 3.0</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a0a14;
+      color: #e2e8f0;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 20px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #6366f1, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #64748b;
+      font-size: 0.95rem;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .instructions {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 20px 24px;
+      max-width: 640px;
+      width: 100%;
+      margin-bottom: 32px;
+      line-height: 1.7;
+      font-size: 0.92rem;
+      color: #94a3b8;
+    }
+
+    .instructions strong { color: #e2e8f0; }
+
+    .instructions ol {
+      padding-left: 20px;
+      margin-top: 10px;
+    }
+
+    .instructions li { margin-bottom: 6px; }
+
+    code {
+      background: #0f172a;
+      color: #818cf8;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-family: 'Courier New', monospace;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      max-width: 640px;
+      width: 100%;
+    }
+
+    @media (max-width: 500px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: #111827;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover { border-color: #6366f1; }
+
+    .card-info { flex: 1; min-width: 0; }
+
+    .card-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-path {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      flex-shrink: 0;
+    }
+
+    .badge-root  { background: #312e81; color: #a5b4fc; }
+    .badge-pub   { background: #1e3a5f; color: #7dd3fc; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #6366f1;
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      flex-shrink: 0;
+      transition: background 0.15s;
+    }
+
+    .btn:hover { background: #4f46e5; }
+
+    .btn svg { width: 14px; height: 14px; fill: currentColor; }
+
+    .all-btn {
+      margin-top: 28px;
+      background: #1e293b;
+      border: 1px solid #6366f1;
+      color: #a5b4fc;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+      letter-spacing: 0.01em;
+    }
+
+    .all-btn:hover { background: #1e1b4b; }
+
+    .note {
+      margin-top: 28px;
+      font-size: 0.8rem;
+      color: #475569;
+      text-align: center;
+      max-width: 480px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📥 Download Files</h1>
+  <p class="subtitle">Everything you need to upload to your GitHub repository for Vercel</p>
+
+  <div class="instructions">
+    <strong>How to get this on GitHub + Vercel:</strong>
+    <ol>
+      <li>Download all files below using the button at the bottom</li>
+      <li>Go to your GitHub repo → click <strong>Add file → Upload files</strong></li>
+      <li>Upload <code>server.js</code>, <code>package.json</code>, <code>vercel.json</code>, and <code>.gitignore</code> to the <strong>root</strong> of the repo</li>
+      <li>Create a folder called <code>public</code> and upload all the <code>public/</code> files into it</li>
+      <li>Commit the changes — Vercel will auto-redeploy within 30 seconds</li>
+    </ol>
+  </div>
+
+  <div class="grid" id="file-grid"></div>
+
+  <button class="all-btn" onclick="downloadAll()">⬇ Download All Files</button>
+
+  <p class="note">
+    Do not upload <code>users.json</code> or <code>sessions.json</code> — those are private and should never go on GitHub.
+  </p>
+
+<script>
+const FILES = [
+  { name: 'server.js',          path: 'server.js',                  scope: 'root' },
+  { name: 'package.json',       path: 'package.json',               scope: 'root' },
+  { name: 'render.yaml',        path: 'render.yaml',                scope: 'root' },
+  { name: 'flood.js',           path: 'flood.js',                   scope: 'root' },
+  { name: 'index.html',         path: 'public/index.html',          scope: 'public' },
+  { name: 'login.html',         path: 'public/login.html',          scope: 'public' },
+  { name: 'dashboard.html',     path: 'public/dashboard.html',      scope: 'public' },
+  { name: 'chess.html',         path: 'public/chess.html',          scope: 'public' },
+  { name: 'spam.html',          path: 'public/spam.html',           scope: 'public' },
+  { name: 'dominate.html',      path: 'public/dominate.html',       scope: 'public' },
+  { name: 'rivals.html',        path: 'public/rivals.html',         scope: 'public' },
+  { name: 'soccer-random.html', path: 'public/soccer-random.html',  scope: 'public' },
+  { name: 'home.html',          path: 'public/home.html',           scope: 'public' },
+  { name: 'viewers.js',         path: 'public/viewers.js',          scope: 'public' },
+  { name: 'download.html',      path: 'public/download.html',       scope: 'public' },
+];
+
+const grid = document.getElementById('file-grid');
+
+FILES.forEach(f => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="card-info">
+      <div class="card-name">${f.name}</div>
+      <div class="card-path">${f.path}</div>
+    </div>
+    <span class="badge badge-${f.scope === 'root' ? 'root' : 'pub'}">${f.scope}</span>
+    <a class="btn" href="/download-file?f=${encodeURIComponent(f.path)}" download="${f.name}">
+      <svg viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v9.586l2.293-2.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V3a1 1 0 011-1zM3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/></svg>
+      Save
+    </a>
+  `;
+  grid.appendChild(card);
+});
+
+async function downloadAll() {
+  for (let i = 0; i < FILES.length; i++) {
+    const f = FILES[i];
+    const a = document.createElement('a');
+    a.href = `/download-file?f=${encodeURIComponent(f.path)}`;
+    a.download = f.name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    await new Promise(r => setTimeout(r, 400));
+  }
+}
+</script>
+<script src="https://replit-cdn.com/replit-pill/replit-pill.global.js" data-repl-id="7933c196-4e52-4571-a4fc-b50a1f4a799a"></script></body>
+</html>
