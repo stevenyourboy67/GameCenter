@@ -1,0 +1,22 @@
+{
+    "projectId": "REPLACE_WITH_YOUR_PROJECT_ID",
+    "projectName": "GameCenter",
+    "sites": [
+        {
+            "$id": "gamecenter",
+            "name": "GameCenter",
+            "enabled": true,
+            "logging": true,
+            "framework": "other",
+            "buildRuntime": "node-22",
+            "adapter": "ssr",
+            "installCommand": "npm install",
+            "buildCommand": "",
+            "outputDirectory": "./",
+            "fallbackFile": null,
+            "specification": "s-0.5vcpu-512mb",
+            "timeout": 30,
+            "providerRootDirectory": "./"
+        }
+    ]
+}
