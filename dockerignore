@@ -1,0 +1,17 @@
+node_modules
+npm-debug.log
+.git
+.gitignore
+.replit
+.replit.backup
+.upm
+.cache
+.config
+.local
+.agents
+attached_assets
+users.json
+sessions.json
+README.md
+CONTRIBUTING.md
+LICENSE
